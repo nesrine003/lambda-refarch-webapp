@@ -397,16 +397,27 @@ Resources:
       Description: Todo example app
       OauthToken:
         Ref: OauthToken
-      BuildSpec: "version: 0.1\nfrontend:\n  phases:\n    build:\n      commands:\n\
-        \        - cd www/src\n        - npm install\n        - npm run build\n  artifacts:\n\
-        \    baseDirectory: www/build/\n    files:\n      - '**/*'"
+      BuildSpec: |
+        version: 0.1
+        frontend:
+          phases:
+            build:
+              commands:
+                - cd www/src
+                - npm install
+                - export NODE_OPTIONS=--openssl-legacy-provider
+                - npm run build  # Run the build after setting the NODE_OPTIONS variable
+          artifacts:
+            baseDirectory: www/build/
+            files:
+              - '**/*'
       Tags:
-      - Key: Name
-        Value: Todo
+        - Key: Name
+          Value: Todo
       IAMServiceRole:
         Fn::GetAtt:
-        - AmplifyRole
-        - Arn
+          - AmplifyRole
+          - Arn
     Metadata:
       SamResourceId: AmplifyApp
   AmplifyBranch:
